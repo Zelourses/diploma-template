@@ -1,0 +1,22 @@
+name: build document
+on: [push, workflow_dispatch, pull_request]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: fontist/setup-fontist@v2
+      - run: fontist install --accept-all-licenses "Times New Roman"
+      - uses: actions/checkout@v4
+      - uses: typst-community/setup-typst@v4
+      - run: typst compile main.typ diploma.pdf --font-path ~/.fontist/fonts
+      - uses: softprops/action-gh-release@v1
+        with:
+          tag_name: "v${{ github.run_number }}"
+          files: diploma.pdf
+          name: Diploma ${{ github.sha }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
