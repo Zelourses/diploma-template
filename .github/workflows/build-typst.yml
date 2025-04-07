@@ -12,6 +12,7 @@ jobs:
       - run: fontist install --accept-all-licenses "Times New Roman"
       - uses: actions/checkout@v4
       - uses: typst-community/setup-typst@v4
+      - run: typst fonts
       - run: typst compile main.typ diploma.pdf
       - uses: softprops/action-gh-release@v1
         with:
