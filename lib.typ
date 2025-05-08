@@ -51,6 +51,16 @@
   ),
   body,
 ) = {
+  let get-supplement(it) = {
+    if it.func() == image {
+      [Рисунок]
+    } else if it.func() == raw {
+      [Листинг]
+    } else {
+      auto
+    }
+  }
+
   set text(
     font: font-type,
     lang: "ru",
@@ -95,6 +105,9 @@
       counter(figure).update(0) // сброс значения счётчика.. фигур?
       counter(figure.where(kind: image)).update(0) // сброс счётчика рисунков
       counter(math.equation).update(0) // сброс значения счетчика уравнений
+      counter(figure.where(kind: raw)).update(0) // сброс счётчика листингов кода
+      // Я уверен, что я забыл сбросить счётчик ещё с чего-то.
+
       // Если надо, здесь пишется upper(it), и получаем кричащий первый уровень
       if important_headings.contains(lower(to-string(it.body))) {
         align(center, it)
@@ -125,7 +138,7 @@
 
   // Рисунки
   show figure: align.with(center)
-  set figure(supplement: [Рисунок])
+  set figure(supplement: get-supplement)
   set figure.caption(separator: [ -- ])
   set figure(numbering: num => ((counter(heading.where(level: 1)).get() + (num,)).map(str).join(".")))
 
@@ -177,7 +190,7 @@
   }
 
 
-  outline(title: upper("Содержание"), indent: 1.5em, depth: 30)
+  outline(title: upper("Содержание"), indent: 1.5em, depth: 2)
 
   body
 }
